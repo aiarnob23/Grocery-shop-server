@@ -25,6 +25,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     //await client.connect();
     const productsCollection = client.db("airGrocery").collection('products');
+    const cartCollection = client.db("airGrocery").collection('userCart');
 
     //product get by query
    app.get('/products',async(req,res)=>{
@@ -41,6 +42,19 @@ async function run() {
     }
    })
 
+   //cart handle.......
+   //cart post
+   app.post('/cart',async(req,res)=>{
+    const product = req.body;
+    const result = await cartCollection.insertOne(product);
+    res.send(result);
+   })
+   //get cart products
+   app.get('/cart', async(req,res)=>{
+    const cursor = cartCollection.find();
+    const result = await cursor.toArray();
+    res.send(result);
+   })
 
     // Send a ping to confirm a successful connection
     //await client.db("admin").command({ ping: 1 });
