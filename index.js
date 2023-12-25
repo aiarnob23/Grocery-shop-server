@@ -51,9 +51,17 @@ async function run() {
    })
    //get cart products
    app.get('/cart', async(req,res)=>{
-    const cursor = cartCollection.find();
-    const result = await cursor.toArray();
-    res.send(result);
+     try{
+       let query = {};
+       if(req.query?.email){
+        query={email: req.query.email};
+       }
+       const result = await cartCollection.find(query).toArray();
+       res.send(result);
+     }
+     catch(error){
+      console.log(error);
+     }
    })
 
     // Send a ping to confirm a successful connection
