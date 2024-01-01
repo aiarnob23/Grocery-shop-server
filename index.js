@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_HANDLE}:${process.env.USER_PASSWORD}@cluster0.z280lkm.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -62,6 +62,14 @@ async function run() {
      catch(error){
       console.log(error);
      }
+   })
+
+   //delete a cart product by object_id
+   app.delete('/cart/:id', async(req,res)=>{
+    const id = req.params.id;
+    const query = {_id : new ObjectId(id)};
+    const result = await cartCollection.deleteOne(query);
+    res.send(result);
    })
 
     // Send a ping to confirm a successful connection
